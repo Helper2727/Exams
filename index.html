@@ -36,16 +36,12 @@
             margin-right: 10px;
         }
 
-        .navbar a {
+        footer {
+            background-color: #333;
             color: white;
-            padding: 14px 20px;
-            text-decoration: none;
             text-align: center;
-        }
-
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
+            padding: 10px 0;
+            margin-top: auto;
         }
 
         .container {
@@ -56,32 +52,14 @@
         }
 
         .content {
-            width: 60%;
+            width: 100%;
             padding: 20px;
             background-color: #2f3136;
             border-radius: 8px;
         }
 
         .preview {
-            width: 40%;
-            padding: 20px;
-            background-color: #2f3136;
-            border-radius: 8px;
-        }
-
-        .back-button {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background-color: #7289da;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .back-button:hover {
-            background-color: #5b6eae;
+            display: none; /* Assuming you don't need preview */
         }
 
         #fileList {
@@ -119,14 +97,6 @@
         .folder-item i {
             margin-right: 10px;
         }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            margin-top: auto;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -136,19 +106,11 @@
             <i class="fas fa-crown"></i>
             <span>Kings Collection</span>
         </div>
-        <a href="index.html">Home</a>
-        <a href="videos.html">Videos</a>
-        <a href="textbook.html">Textbook</a>
-        <a href="assessments.html">Assessments</a>
     </div>
     <div class="container">
         <div class="content">
-            <a href="index.html" class="back-button">&larr; Back to Home</a>
             <h1>Exams</h1>
             <ul id="fileList"></ul>
-        </div>
-        <div class="preview">
-            <iframe id="previewFrame" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
     </div>
     <footer>
