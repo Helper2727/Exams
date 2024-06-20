@@ -244,7 +244,10 @@
         }
 
         (async function() {
-            await fetchFolderContents('https://api.github.com/repos/Helper2727}/Exams/contents', document.getElementById('fileList'));
+            const repoOwner = 'Helper2727';
+            const repoName = 'Exams';
+            const apiUrl = `https://api.github.com/repos/Helper2727/Exams/contents`;
+            await fetchFolderContents(apiUrl, document.getElementById('fileList'));
         })();
     </script>
 </body>
