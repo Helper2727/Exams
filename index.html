@@ -65,7 +65,7 @@
         }
     }
 
-    function createTreeElement(item) {
+    async function createTreeElement(item) {
         const li = document.createElement('li');
         if (item.type === 'file') {
             if (item.name !== 'index.html' && item.name !== '.gitattributes') {
@@ -86,7 +86,7 @@
         } else if (item.type === 'dir') {
             const folderSpan = document.createElement('span');
             folderSpan.textContent = item.name;
-            folderSpan.classList.add('folder');
+            folderSpan.classList.add('folder', 'collapsed'); // Start collapsed
             folderSpan.addEventListener('click', async () => {
                 if (li.querySelector('ul')) {
                     // If folder is already fetched, toggle display
@@ -94,7 +94,6 @@
                 } else {
                     // If folder contents not fetched, fetch and display
                     const ul = document.createElement('ul');
-                    ul.style.display = 'block'; // Show folder contents immediately
                     li.appendChild(ul);
 
                     const contents = await fetchRepoContents(item.url);
@@ -105,7 +104,12 @@
                         const childLi = createTreeElement(child);
                         ul.appendChild(childLi);
                     });
+
+                    // Show the folder contents
+                    ul.style.display = 'block';
                 }
+                // Toggle the collapsed class for folder span
+                folderSpan.classList.toggle('collapsed');
             });
             li.appendChild(folderSpan);
         }
@@ -121,8 +125,7 @@
             if (item.type === 'file' && (item.name === 'index.html' || item.name === '.gitattributes')) {
                 return; // Skip index.html and .gitattributes files at the root level
             }
-            const li = createTreeElement(item);
-            ul.appendChild(li);
+            createTreeElement(item).then(li => ul.appendChild(li));
         });
         repoTree.appendChild(ul);
     }
