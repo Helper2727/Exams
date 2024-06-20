@@ -53,7 +53,7 @@
     .preview-container {
         margin-top: 20px;
     }
-    iframe {
+    iframe, object {
         width: 100%;
         height: 600px; /* Adjust height as needed */
         border: none;
@@ -78,7 +78,7 @@
 <script>
     const repoOwner = 'Helper2727';
     const repoName = 'Exams';
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
+    const apiUrl = `https://api.github.com/repos/Helper2727/Exams/contents`;
 
     async function fetchRepoContents(url) {
         try {
@@ -103,6 +103,8 @@
             fileSpan.addEventListener('click', () => {
                 if (isOfficeDocument(item.name)) {
                     displayOfficePreview(item.download_url);
+                } else if (isPdfDocument(item.name)) {
+                    displayPdfPreview(item.download_url);
                 } else {
                     displayGenericPreview(item.download_url);
                 }
@@ -150,6 +152,12 @@
         return officeExtensions.includes(extension);
     }
 
+    function isPdfDocument(fileName) {
+        const pdfExtensions = ['.pdf'];
+        const extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+        return pdfExtensions.includes(extension);
+    }
+
     function displayOfficePreview(fileUrl) {
         const previewContainer = document.getElementById('previewContent');
         previewContainer.innerHTML = ''; // Clear previous content
@@ -157,6 +165,16 @@
         const iframe = document.createElement('iframe');
         iframe.setAttribute('src', `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`);
         previewContainer.appendChild(iframe);
+    }
+
+    function displayPdfPreview(fileUrl) {
+        const previewContainer = document.getElementById('previewContent');
+        previewContainer.innerHTML = ''; // Clear previous content
+
+        const pdfObject = document.createElement('object');
+        pdfObject.setAttribute('data', fileUrl);
+        pdfObject.setAttribute('type', 'application/pdf');
+        previewContainer.appendChild(pdfObject);
     }
 
     async function displayGenericPreview(fileUrl) {
