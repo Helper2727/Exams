@@ -83,6 +83,9 @@
     async function fetchRepoContents(url) {
         try {
             const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
             const data = await response.json();
             return data;
         } catch (error) {
@@ -170,15 +173,21 @@
     }
 
     async function displayRepoContents() {
-        const repoContents = await fetchRepoContents(apiUrl);
-        const repoTree = document.getElementById('repoTree');
-        repoTree.innerHTML = ''; // Clear previous contents
-        const ul = document.createElement('ul');
-        repoContents.forEach(item => {
-            const li = createTreeElement(item);
-            ul.appendChild(li);
-        });
-        repoTree.appendChild(ul);
+        try {
+            const repoContents = await fetchRepoContents(apiUrl);
+            const repoTree = document.getElementById('repoTree');
+            repoTree.innerHTML = ''; // Clear previous contents
+            const ul = document.createElement('ul');
+            repoContents.forEach(item => {
+                const li = createTreeElement(item);
+                ul.appendChild(li);
+            });
+            repoTree.appendChild(ul);
+        } catch (error) {
+            console.error('Failed to fetch repository contents:', error);
+            const repoTree = document.getElementById('repoTree');
+            repoTree.textContent = 'Failed to fetch repository contents. Check console for details.';
+        }
     }
 
     displayRepoContents();
