@@ -65,53 +65,46 @@
         }
     }
 
-    async function createTreeElement(item) {
+    function createTreeElement(item) {
         const li = document.createElement('li');
         if (item.type === 'file') {
-            if (item.name !== 'index.html' && item.name !== '.gitattributes') {
-                const fileSpan = document.createElement('span');
-                fileSpan.textContent = item.name;
-                fileSpan.classList.add('file');
+            const fileSpan = document.createElement('span');
+            fileSpan.textContent = item.name;
+            fileSpan.classList.add('file');
 
-                const downloadButton = document.createElement('button');
-                downloadButton.textContent = 'Download';
-                downloadButton.classList.add('download-button');
-                downloadButton.addEventListener('click', () => {
-                    window.open(item.download_url, '_blank');
-                });
+            const downloadButton = document.createElement('button');
+            downloadButton.textContent = 'Download';
+            downloadButton.classList.add('download-button');
+            downloadButton.addEventListener('click', () => {
+                window.open(item.download_url, '_blank');
+            });
 
-                li.appendChild(fileSpan);
-                li.appendChild(downloadButton);
-            }
+            li.appendChild(fileSpan);
+            li.appendChild(downloadButton);
         } else if (item.type === 'dir') {
             const folderSpan = document.createElement('span');
             folderSpan.textContent = item.name;
-            folderSpan.classList.add('folder', 'collapsed'); // Start collapsed
-            folderSpan.addEventListener('click', async () => {
-                if (li.querySelector('ul')) {
-                    // If folder is already fetched, toggle display
-                    li.querySelector('ul').style.display = li.querySelector('ul').style.display === 'none' ? 'block' : 'none';
+            folderSpan.classList.add('folder');
+            folderSpan.addEventListener('click', () => {
+                li.classList.toggle('collapsed');
+                if (li.classList.contains('collapsed')) {
+                    ul.style.display = 'none';
                 } else {
-                    // If folder contents not fetched, fetch and display
-                    const ul = document.createElement('ul');
-                    li.appendChild(ul);
-
-                    const contents = await fetchRepoContents(item.url);
-                    contents.forEach(child => {
-                        if (child.type === 'file' && (child.name === 'index.html' || child.name === '.gitattributes')) {
-                            return; // Skip index.html and .gitattributes files
-                        }
-                        const childLi = createTreeElement(child);
-                        ul.appendChild(childLi);
-                    });
-
-                    // Show the folder contents
                     ul.style.display = 'block';
                 }
-                // Toggle the collapsed class for folder span
-                folderSpan.classList.toggle('collapsed');
             });
             li.appendChild(folderSpan);
+
+            const ul = document.createElement('ul');
+            ul.style.display = 'none';
+            li.appendChild(ul);
+
+            fetchRepoContents(item.url).then(contents => {
+                contents.forEach(child => {
+                    const childLi = createTreeElement(child);
+                    ul.appendChild(childLi);
+                });
+            });
         }
         return li;
     }
@@ -122,10 +115,8 @@
         repoTree.innerHTML = ''; // Clear previous contents
         const ul = document.createElement('ul');
         repoContents.forEach(item => {
-            if (item.type === 'file' && (item.name === 'index.html' || item.name === '.gitattributes')) {
-                return; // Skip index.html and .gitattributes files at the root level
-            }
-            createTreeElement(item).then(li => ul.appendChild(li));
+            const li = createTreeElement(item);
+            ul.appendChild(li);
         });
         repoTree.appendChild(ul);
     }
