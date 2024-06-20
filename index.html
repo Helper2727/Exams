@@ -10,15 +10,6 @@
         padding: 20px;
         background-color: #2C2F33;
         color: #FFFFFF;
-        display: flex;
-    }
-    #repoTree {
-        flex: 1;
-        max-width: 300px;
-    }
-    #filePreview {
-        flex: 2;
-        padding-left: 20px;
     }
     ul {
         list-style-type: none;
@@ -32,9 +23,7 @@
         color: #7289DA;
     }
     .file {
-        cursor: pointer;
         color: #FFFFFF;
-        text-decoration: underline;
     }
     .collapsed {
         font-style: italic;
@@ -50,14 +39,6 @@
         text-decoration: none;
         border-radius: 5px;
     }
-    .preview-container {
-        margin-top: 20px;
-    }
-    iframe {
-        width: 100%;
-        height: 600px; /* Adjust height as needed */
-        border: none;
-    }
 </style>
 </head>
 <body>
@@ -68,24 +49,14 @@
     Loading repository contents...
 </div>
 
-<div id="filePreview">
-    <h2>File Preview</h2>
-    <div class="preview-container" id="previewContent">
-        Select a file to preview its content.
-    </div>
-</div>
-
 <script>
     const repoOwner = 'Helper2727';
     const repoName = 'Exams';
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
+    const apiUrl = `https://api.github.com/repos/Helper2727/Exams/contents`;
 
     async function fetchRepoContents(url) {
         try {
             const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
             const data = await response.json();
             return data;
         } catch (error) {
@@ -100,13 +71,6 @@
             const fileSpan = document.createElement('span');
             fileSpan.textContent = item.name;
             fileSpan.classList.add('file');
-            fileSpan.addEventListener('click', () => {
-                if (isOfficeDocument(item.name)) {
-                    displayOfficePreview(item.download_url);
-                } else {
-                    displayGenericPreview(item.download_url);
-                }
-            });
 
             const downloadButton = document.createElement('button');
             downloadButton.textContent = 'Download';
@@ -123,9 +87,10 @@
             folderSpan.classList.add('folder');
             folderSpan.addEventListener('click', () => {
                 li.classList.toggle('collapsed');
-                const ul = li.querySelector('ul');
-                if (ul) {
-                    ul.style.display = li.classList.contains('collapsed') ? 'none' : 'block';
+                if (li.classList.contains('collapsed')) {
+                    ul.style.display = 'none';
+                } else {
+                    ul.style.display = 'block';
                 }
             });
             li.appendChild(folderSpan);
@@ -144,50 +109,16 @@
         return li;
     }
 
-    function isOfficeDocument(fileName) {
-        const officeExtensions = ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'];
-        const extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
-        return officeExtensions.includes(extension);
-    }
-
-    function displayOfficePreview(fileUrl) {
-        const previewContainer = document.getElementById('previewContent');
-        previewContainer.innerHTML = ''; // Clear previous content
-
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('src', `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`);
-        previewContainer.appendChild(iframe);
-    }
-
-    async function displayGenericPreview(fileUrl) {
-        try {
-            const response = await fetch(fileUrl);
-            const text = await response.text();
-            const previewContainer = document.getElementById('previewContent');
-            previewContainer.textContent = text; // Display plain text content
-        } catch (error) {
-            console.error('Error fetching file content:', error);
-            const previewContainer = document.getElementById('previewContent');
-            previewContainer.textContent = 'Error fetching file content.';
-        }
-    }
-
     async function displayRepoContents() {
-        try {
-            const repoContents = await fetchRepoContents(apiUrl);
-            const repoTree = document.getElementById('repoTree');
-            repoTree.innerHTML = ''; // Clear previous contents
-            const ul = document.createElement('ul');
-            repoContents.forEach(item => {
-                const li = createTreeElement(item);
-                ul.appendChild(li);
-            });
-            repoTree.appendChild(ul);
-        } catch (error) {
-            console.error('Failed to fetch repository contents:', error);
-            const repoTree = document.getElementById('repoTree');
-            repoTree.textContent = 'Failed to fetch repository contents. Check console for details.';
-        }
+        const repoContents = await fetchRepoContents(apiUrl);
+        const repoTree = document.getElementById('repoTree');
+        repoTree.innerHTML = ''; // Clear previous contents
+        const ul = document.createElement('ul');
+        repoContents.forEach(item => {
+            const li = createTreeElement(item);
+            ul.appendChild(li);
+        });
+        repoTree.appendChild(ul);
     }
 
     displayRepoContents();
