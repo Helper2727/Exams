@@ -1,228 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GitHub Repository Explorer</title>
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        display: flex;
-        padding: 20px;
-        background-color: #2C2F33;
-        color: #FFFFFF;
-        margin: 0;
-    }
-    #repoTree {
-        flex: 1;
-        background-color: #1E2124;
-        padding: 20px;
-        border-radius: 5px;
-        overflow-y: auto;
-        max-height: 80vh;
-    }
-    #filePreview {
-        flex: 1;
-        padding: 20px;
-        background-color: #1E2124;
-        color: #FFFFFF;
-        overflow-y: auto;
-        border-radius: 5px;
-        max-height: 80vh;
-    }
-    ul {
-        list-style-type: none;
-        padding-left: 20px;
-        margin: 0;
-    }
-    ul li {
-        margin-bottom: 5px;
-    }
-    .folder {
-        cursor: pointer;
-        color: #7289DA;
-    }
-    .file {
-        cursor: pointer;
-        color: #FFFFFF;
-    }
-    .file:hover {
-        text-decoration: underline;
-    }
-    .collapsed {
-        font-style: italic;
-    }
-    .download-button {
-        background-color: #7289DA;
-        color: #FFFFFF;
-        border: none;
-        padding: 5px 10px;
-        margin-left: 10px;
-        cursor: pointer;
-        display: inline-block;
-        text-decoration: none;
-        border-radius: 5px;
-    }
-    .viewer-container {
-        width: 100%;
-        height: 100%;
-    }
-    .preview-header {
-        font-size: 1.2em;
-        margin-bottom: 10px;
-        color: #7289DA;
-    }
-    .preview-content {
-        white-space: pre-wrap;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repository Explorer</title>
+    <style>
+        /* CSS styles for the application - Light Theme */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #F4F4F4;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            color: #007BFF;
+        }
+        #repoTree {
+            width: 100%;
+            max-width: 400px;
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        #filePreview {
+            width: 100%;
+            max-width: 600px;
+            background-color: #FFFFFF;
+            color: #333333;
+            overflow-y: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+            margin: 0;
+        }
+        ul li {
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .folder {
+            color: #007BFF;
+        }
+        .file {
+            color: #333333;
+        }
+        .file:hover {
+            background-color: #E0E0E0;
+        }
+        .collapsed {
+            font-style: italic;
+        }
+        .download-button {
+            background-color: #007BFF;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .viewer-container {
+            width: 100%;
+            height: 100%;
+        }
+        .preview-header {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+        .preview-content {
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 <body>
-<h1>GitHub Repository Explorer</h1>
-<div id="repoTree">
-    Loading repository contents...
-</div>
-<div id="filePreview">
-    Select a file to preview its content.
-</div>
-<!-- Viewer.js for PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
-<!-- Office.js for Office files -->
-<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
-<script>
-    const repoOwner = 'Helper2727';
-    const repoName = 'Exams';
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
+    <h1>GitHub Repository Explorer</h1>
+    <div id="repoTree">
+        Loading repository contents...
+    </div>
+    <div id="filePreview">
+        Select a file to preview its content.
+    </div>
 
-    async function fetchRepoContents(url) {
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching repository contents:', error);
-            return [];
+    <!-- Viewer.js for PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <!-- Office.js for Office files -->
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <!-- JavaScript code -->
+    <script>
+        // JavaScript code remains unchanged
+        const repoOwner = 'Helper2727';
+        const repoName = 'Exams';
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
+
+        async function fetchRepoContents(url) {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching repository contents:', error);
+                return [];
+            }
         }
-    }
 
-    function createTreeElement(item) {
-        const li = document.createElement('li');
-        if (item.type === 'file') {
-            const fileSpan = document.createElement('span');
-            fileSpan.textContent = item.name;
-            fileSpan.classList.add('file');
+        function createTreeElement(item) {
+            const li = document.createElement('li');
+            if (item.type === 'file') {
+                const fileSpan = document.createElement('span');
+                fileSpan.textContent = item.name;
+                fileSpan.classList.add('file');
 
-            fileSpan.addEventListener('click', async () => {
-                if (item.name.endsWith('.pdf')) {
-                    previewPDF(item.download_url);
-                } else if (isOfficeFile(item.name)) {
-                    previewOfficeDoc(item.download_url);
-                } else {
-                    displayFileContent(item.name, 'Preview not available for this file type.');
-                }
-            });
+                fileSpan.addEventListener('click', async () => {
+                    if (item.name.endsWith('.pdf')) {
+                        previewPDF(item.download_url);
+                    } else if (isOfficeFile(item.name)) {
+                        previewOfficeDoc(item.download_url);
+                    } else {
+                        displayFileContent(item.name, 'Preview not available for this file type.');
+                    }
+                });
 
-            li.appendChild(fileSpan);
-        } else if (item.type === 'dir') {
-            const folderSpan = document.createElement('span');
-            folderSpan.textContent = item.name;
-            folderSpan.classList.add('folder');
-            folderSpan.addEventListener('click', () => {
-                li.classList.toggle('collapsed');
-                const ul = li.querySelector('ul');
-                if (li.classList.contains('collapsed')) {
-                    ul.style.display = 'none';
-                } else {
-                    ul.style.display = 'block';
-                }
-            });
-            li.appendChild(folderSpan);
+                li.appendChild(fileSpan);
+            } else if (item.type === 'dir') {
+                const folderSpan = document.createElement('span');
+                folderSpan.textContent = item.name;
+                folderSpan.classList.add('folder');
+
+                folderSpan.addEventListener('click', () => {
+                    li.classList.toggle('collapsed');
+                    const ul = li.querySelector('ul');
+                    if (li.classList.contains('collapsed')) {
+                        ul.style.display = 'none';
+                    } else {
+                        ul.style.display = 'block';
+                    }
+                });
+
+                li.appendChild(folderSpan);
+
+                const ul = document.createElement('ul');
+                ul.style.display = 'none';
+                li.appendChild(ul);
+
+                fetchRepoContents(item.url).then(contents => {
+                    contents.forEach(child => {
+                        const childLi = createTreeElement(child);
+                        ul.appendChild(childLi);
+                    });
+                });
+            }
+            return li;
+        }
+
+        async function displayRepoContents() {
+            const repoContents = await fetchRepoContents(apiUrl);
+            const repoTree = document.getElementById('repoTree');
+            repoTree.innerHTML = '';
 
             const ul = document.createElement('ul');
-            ul.style.display = 'none';
-            li.appendChild(ul);
-
-            fetchRepoContents(item.url).then(contents => {
-                contents.forEach(child => {
-                    const childLi = createTreeElement(child);
-                    ul.appendChild(childLi);
-                });
+            repoContents.forEach(item => {
+                const li = createTreeElement(item);
+                ul.appendChild(li);
             });
+
+            repoTree.appendChild(ul);
         }
-        return li;
-    }
 
-    async function displayRepoContents() {
-        const repoContents = await fetchRepoContents(apiUrl);
-        const repoTree = document.getElementById('repoTree');
-        repoTree.innerHTML = ''; // Clear previous contents
-        const ul = document.createElement('ul');
-        repoContents.forEach(item => {
-            const li = createTreeElement(item);
-            ul.appendChild(li);
-        });
-        repoTree.appendChild(ul);
-    }
+        function displayFileContent(fileName, content) {
+            const filePreview = document.getElementById('filePreview');
+            filePreview.innerHTML = `
+                <div class="preview-header">${fileName}</div>
+                <div class="preview-content">${content}</div>
+            `;
+        }
 
-    function displayFileContent(fileName, content) {
-        const filePreview = document.getElementById('filePreview');
-        filePreview.innerHTML = `
-            <div class="preview-header">${fileName}</div>
-            <div class="preview-content">${content}</div>
-        `;
-    }
+        function isOfficeFile(fileName) {
+            const officeExtensions = ['.docx', '.pptx', '.xlsx'];
+            return officeExtensions.some(ext => fileName.endsWith(ext));
+        }
 
-    function isOfficeFile(fileName) {
-        const officeExtensions = ['.docx', '.pptx', '.xlsx'];
-        return officeExtensions.some(ext => fileName.endsWith(ext));
-    }
+        async function previewPDF(url) {
+            const loadingTask = pdfjsLib.getDocument(url);
+            const pdfDocument = await loadingTask.promise;
+            const page = await pdfDocument.getPage(1);
+            const scale = 1.5;
+            const viewport = page.getViewport({ scale });
 
-    async function previewPDF(url) {
-        const loadingTask = pdfjsLib.getDocument(url);
-        const pdfDocument = await loadingTask.promise;
-        const page = await pdfDocument.getPage(1); // Fetch first page
-        const scale = 1.5;
-        const viewport = page.getViewport({ scale });
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
 
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
 
-        const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        };
-        await page.render(renderContext).promise;
+            await page.render(renderContext).promise;
 
-        const filePreview = document.getElementById('filePreview');
-        filePreview.innerHTML = `
-            <div class="preview-header">${pdfDocument.numPages} pages - PDF Preview</div>
-            <div class="viewer-container">
-                <canvas id="pdfCanvas"></canvas>
-            </div>
-        `;
-        const pdfCanvas = document.getElementById('pdfCanvas');
-        pdfCanvas.width = viewport.width;
-        pdfCanvas.height = viewport.height;
-        pdfCanvas.getContext('2d').drawImage(canvas, 0, 0);
-    }
+            const filePreview = document.getElementById('filePreview');
+            filePreview.innerHTML = `
+                <div class="preview-header">${pdfDocument.numPages} pages - PDF Preview</div>
+                <div class="viewer-container">
+                    <canvas id="pdfCanvas"></canvas>
+                </div>
+            `;
 
-    async function previewOfficeDoc(url) {
-        Office.initialize = () => {
-            Office.context.document.getFilePropertiesAsync(result => {
-                if (result.status === Office.AsyncResultStatus.Succeeded) {
-                    const filePreview = document.getElementById('filePreview');
-                    filePreview.innerHTML = `
-                        <div class="preview-header">${result.value.title}</div>
-                        <div class="preview-content">Author: ${result.value.author}</div>
-                    `;
-                }
-            });
-        };
-    }
+            const pdfCanvas = document.getElementById('pdfCanvas');
+            pdfCanvas.width = viewport.width;
+            pdfCanvas.height = viewport.height;
+            pdfCanvas.getContext('2d').drawImage(canvas, 0, 0);
+        }
 
-    displayRepoContents();
-</script>
+        async function previewOfficeDoc(url) {
+            Office.initialize = () => {
+                Office.context.document.getFilePropertiesAsync(result => {
+                    if (result.status === Office.AsyncResultStatus.Succeeded) {
+                        const filePreview = document.getElementById('filePreview');
+                        filePreview.innerHTML = `
+                            <div class="preview-header">${result.value.title}</div>
+                            <div class="preview-content">Author: ${result.value.author}</div>
+                        `;
+                    }
+                });
+            };
+        }
+
+        displayRepoContents();
+    </script>
 </body>
 </html>
+
