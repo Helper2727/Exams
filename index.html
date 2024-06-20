@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -50,7 +49,7 @@
 <script>
     const repoOwner = 'Helper2727';
     const repoName = 'Exams';
-    const apiUrl = `https://api.github.com/repos/Helper2727/Exams/contents`;
+    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
 
     async function fetchRepoContents(url) {
         try {
@@ -85,6 +84,7 @@
             folderSpan.classList.add('folder');
             folderSpan.addEventListener('click', () => {
                 li.classList.toggle('collapsed');
+                const ul = li.querySelector('ul');
                 if (li.classList.contains('collapsed')) {
                     ul.style.display = 'none';
                 } else {
