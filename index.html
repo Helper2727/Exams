@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub Repository Explorer</title>
     <style>
-        /* CSS styles for the application - Light Theme */
+        /* CSS styles for the application - Split Layout */
         body {
             font-family: 'Arial', sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            align-items: flex-start; /* Align items to the top of the flex container */
             background-color: #F4F4F4;
             color: #333333;
             margin: 0;
@@ -23,16 +22,16 @@
         }
         #repoTree {
             width: 100%;
-            max-width: 400px;
+            max-width: 300px; /* Adjust width as needed */
             background-color: #FFFFFF;
             border-radius: 5px;
             overflow-y: auto;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            margin-right: 20px; /* Add margin between tree and preview */
+            padding: 20px;
         }
         #filePreview {
-            width: 100%;
-            max-width: 600px;
+            flex: 1; /* Take remaining space */
             background-color: #FFFFFF;
             color: #333333;
             overflow-y: auto;
@@ -245,4 +244,3 @@
     </script>
 </body>
 </html>
-
