@@ -5,10 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protected Page</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2f3136;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
         .preview {
             width: 40%;
             padding: 20px;
-            background-color: #2f3136;
+            background-color: #36393f;
             border-radius: 8px;
         }
 
@@ -48,19 +56,19 @@
             margin-right: 10px;
         }
 
-        /* Hide content initially */
-        .protected-content {
-            display: none;
-        }
-
-        /* Styling for password input and button */
+        /* Password section styling in Discord theme */
         .password-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #2f3136;
+        }
+
+        .password-container h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
         }
 
         .password-container input[type="password"] {
@@ -68,14 +76,16 @@
             font-size: 16px;
             margin-bottom: 10px;
             width: 300px;
-            border: 1px solid #ccc;
+            background-color: #202225;
+            color: #ffffff;
+            border: 1px solid #4f545c;
             border-radius: 4px;
         }
 
         .password-container button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #7289da;
+            background-color: #5865f2;
             color: white;
             border: none;
             border-radius: 4px;
@@ -83,8 +93,40 @@
         }
 
         .password-container button:hover {
-            background-color: #576ab1;
+            background-color: #4752c4;
         }
+
+        /* Hidden content initially */
+        .protected-content {
+            display: none;
+        }
+
+        .navbar {
+            background-color: #36393f;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 1.5em;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        footer {
+            text-align: center;
+            color: #b9bbbe;
+            padding: 20px;
+            background-color: #36393f;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
