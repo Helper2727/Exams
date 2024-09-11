@@ -3,65 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exams - Kings Collection</title>
+    <title>Protected Page</title>
     <style>
         body {
-            background-color: #36393f;
+            font-family: 'Arial', sans-serif;
+            background-color: #2f3136;
             color: #ffffff;
-            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            background-color: #333;
-            padding: 10px;
-        }
-
-        .navbar .logo {
-            font-size: 24px;
-            margin-right: auto;
-            color: #fff;
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar .logo i {
-            margin-right: 10px;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            margin-top: auto;
-        }
-
-        .container {
-            display: flex;
-            width: 80%;
-            margin-top: 20px;
-            flex: 1;
-        }
-
-        .content {
-            width: 60%;
-            padding: 20px;
-            background-color: #2f3136;
-            border-radius: 8px;
         }
 
         .preview {
             width: 40%;
             padding: 20px;
-            background-color: #2f3136;
+            background-color: #36393f;
             border-radius: 8px;
         }
 
@@ -100,30 +55,127 @@
         .folder-item i {
             margin-right: 10px;
         }
+
+        /* Password section styling in Discord theme */
+        .password-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #2f3136;
+        }
+
+        .password-container h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .password-container input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            width: 300px;
+            background-color: #202225;
+            color: #ffffff;
+            border: 1px solid #4f545c;
+            border-radius: 4px;
+        }
+
+        .password-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #5865f2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .password-container button:hover {
+            background-color: #4752c4;
+        }
+
+        /* Hidden content initially */
+        .protected-content {
+            display: none;
+        }
+
+        .navbar {
+            background-color: #36393f;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 1.5em;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        footer {
+            text-align: center;
+            color: #b9bbbe;
+            padding: 20px;
+            background-color: #36393f;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-crown"></i>
-            <span>Kings Collection</span>
-        </div>
+    <!-- Password input container -->
+    <div class="password-container" id="password-container">
+        <h2>Please enter the password to access the website</h2>
+        <input type="password" id="password-input" placeholder="Enter password">
+        <button onclick="checkPassword()">Confirm</button>
     </div>
-    <div class="container">
-        <div class="content">
-            <h1>Exams</h1>
-            <ul id="fileList"></ul>
+
+    <!-- Hidden content -->
+    <div id="protected-content" class="protected-content">
+        <div class="navbar">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                <span>Kings Collection</span>
+            </div>
         </div>
-        <div class="preview">
-            <iframe id="previewFrame" style="width: 100%; height: 100%; border: none;"></iframe>
+
+        <div class="container">
+            <div class="content">
+                <h1>Exams</h1>
+                <ul id="fileList"></ul>
+            </div>
+            <div class="preview">
+                <iframe id="previewFrame" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
         </div>
+        <footer>
+            King Private Limited
+        </footer>
     </div>
-    <footer>
-        King Private Limited
-    </footer>
 
     <script>
+        // Function to check the entered password
+        function checkPassword() {
+            const password = document.getElementById("password-input").value;
+
+            if (password === "orange") {
+                // Show protected content
+                document.getElementById("protected-content").style.display = "block";
+                // Hide password input form
+                document.getElementById("password-container").style.display = "none";
+            } else {
+                alert("Incorrect password. Try again.");
+            }
+        }
+
         async function fetchFolderContents(folderUrl, parentList, path = '') {
             try {
                 const response = await fetch(folderUrl, {
